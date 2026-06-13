@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>F1 Fire Fold — Client Demo Presentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A84C;--gold-light:#E8C96A;--gold-dim:#9B7D35;
+  --black:#0A0A0A;--dark:#111111;--dark2:#161616;--dark3:#1C1C1C;--dark4:#242424;
+  --white:#FFFFFF;--white70:rgba(255,255,255,0.7);--white40:rgba(255,255,255,0.4);--white15:rgba(255,255,255,0.08);
+  --glow:0 0 20px rgba(201,168,76,0.3);
+}
+html{scroll-behavior:smooth}
+body{font-family:'Montserrat',sans-serif;background:var(--black);color:var(--white);overflow-x:hidden;line-height:1.6}
+
+/* ====== DEMO HEADER BAR ====== */
+.demo-topbar{
+  position:fixed;top:0;left:0;right:0;z-index:9999;
+  background:rgba(10,10,10,0.97);
+  border-bottom:1px solid rgba(201,168,76,0.25);
+  backdrop-filter:blur(16px);
+  height:52px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 28px;gap:20px;
+}
+.demo-topbar-brand{
+  display:flex;align-items:center;gap:12px;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:0.08em;
+}
+.demo-topbar-brand span{color:var(--gold)}
+.demo-topbar-badge{
+  background:var(--gold);color:var(--black);
+  font-size:9px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;
+  padding:3px 10px;border-radius:2px;
+}
+.demo-topbar-nav{display:flex;gap:4px}
+.demo-topbar-nav button{
+  background:transparent;border:1px solid transparent;
+  color:var(--white40);font-family:'Montserrat',sans-serif;font-size:10px;
+  font-weight:600;letter-spacing:0.12em;text-transform:uppercase;
+  padding:6px 14px;border-radius:2px;cursor:pointer;transition:all 0.2s;
+}
+.demo-topbar-nav button:hover{color:var(--gold);border-color:rgba(201,168,76,0.3)}
+.demo-topbar-nav button.active{color:var(--gold);border-color:var(--gold);background:rgba(201,168,76,0.07)}
+.demo-topbar-actions{display:flex;align-items:center;gap:10px}
+.demo-live-dot{
+  width:7px;height:7px;border-radius:50%;background:#22C55E;
+  animation:pulse-dot 2s infinite;flex-shrink:0;
+}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.6;transform:scale(0.85)}}
+.demo-live-text{font-size:10px;font-weight:600;letter-spacing:0.12em;color:#22C55E}
+
+/* ====== MAIN SECTIONS ====== */
+.section{display:none;padding-top:52px}
+.section.active{display:block}
+
+/* ====== SLIDE: COVER ====== */
+.cover{
+  min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 40%,rgba(201,168,76,0.06) 0%,transparent 70%),
+    linear-gradient(180deg,#0A0A0A 0%,#111 50%,#0A0A0A 100%);
+  position:relative;overflow:hidden;
+}
+.cover::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,168,76,0.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(201,168,76,0.03) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;
+}
+.cover-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:0.3em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:28px;display:flex;align-items:center;gap:14px;justify-content:center;
+}
+.cover-eyebrow::before,.cover-eyebrow::after{content:'';width:40px;height:1px;background:var(--gold);display:block}
+.cover-logo-big{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(64px,10vw,120px);
+  letter-spacing:0.06em;line-height:1;margin-bottom:8px;
+}
+.cover-logo-big span{color:var(--gold)}
+.cover-slogan{
+  font-family:'Bebas Neue',sans-serif;font-size:clamp(18px,3vw,28px);
+  letter-spacing:0.35em;color:var(--gold-dim);margin-bottom:32px;
+}
+.cover-desc{
+  max-width:560px;margin:0 auto 48px;font-size:15px;
+  color:var(--white70);line-height:1.9;font-weight:400;
+}
+.cover-actions{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-bottom:64px}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;
+  letter-spacing:0.18em;text-transform:uppercase;text-decoration:none;
+  padding:14px 32px;border-radius:2px;cursor:pointer;transition:all 0.3s ease;
+  border:1.5px solid var(--gold);
+}
+.btn-primary{background:var(--gold);color:var(--black)}
+.btn-primary:hover{background:transparent;color:var(--gold);box-shadow:var(--glow)}
+.btn-outline{background:transparent;color:var(--gold)}
+.btn-outline:hover{background:var(--gold);color:var(--black);box-shadow:var(--glow)}
+.cover-stats{
+  display:flex;gap:0;border:1px solid rgba(201,168,76,0.12);border-radius:4px;overflow:hidden;
+  flex-wrap:wrap;justify-content:center;
+}
+.cover-stat{
+  padding:24px 40px;border-right:1px solid rgba(201,168,76,0.08);text-align:center;
+  background:rgba(255,255,255,0.02);
+}
+.cover-stat:last-child{border-right:none}
+.cover-stat-num{font-family:'Bebas Neue',sans-serif;font-size:42px;color:var(--gold);line-height:1}
+.cover-stat-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white40);margin-top:4px}
+
+/* ====== SLIDE: PAGES OVERVIEW ====== */
+.pages-section{padding:80px 0 60px;background:var(--dark)}
+.container{max-width:1200px;margin:0 auto;padding:0 40px}
+.section-label{
+  font-size:10px;font-weight:700;letter-spacing:0.25em;text-transform:uppercase;
+  color:var(--gold);margin-bottom:16px;display:block;
+}
+.divider{width:48px;height:2px;background:var(--gold);margin:16px 0 32px}
+h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,52px);letter-spacing:0.04em;line-height:1.1}
+.pages-grid{
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:48px;
+}
+.page-card{
+  background:var(--dark3);border:1px solid rgba(255,255,255,0.05);border-radius:4px;
+  overflow:hidden;cursor:pointer;transition:all 0.3s;
+}
+.page-card:hover{border-color:rgba(201,168,76,0.3);transform:translateY(-3px);box-shadow:0 8px 32px rgba(0,0,0,0.4)}
+.page-card-preview{
+  height:200px;overflow:hidden;position:relative;
+  background:linear-gradient(145deg,#1A1A1A,#141414);
+}
+.page-card-preview img{width:100%;height:100%;object-fit:cover;opacity:0.85}
+.page-card-preview-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to bottom,transparent 40%,rgba(0,0,0,0.7) 100%);
+}
+.page-card-num{
+  position:absolute;top:12px;left:12px;
+  font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:0.2em;
+  color:var(--gold);background:rgba(0,0,0,0.7);border:1px solid rgba(201,168,76,0.3);
+  padding:3px 10px;border-radius:2px;
+}
+.page-card-body{padding:18px 20px}
+.page-card-name{
+  font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);
+  letter-spacing:0.04em;margin-bottom:6px;
+}
+.page-card-desc{font-size:11px;color:var(--white40);line-height:1.7}
+
+/* ====== SLIDE: LIVE PREVIEW ====== */
+.preview-section{background:var(--black);min-height:calc(100vh - 52px);display:flex;flex-direction:column}
+.preview-toolbar{
+  background:var(--dark2);border-bottom:1px solid rgba(255,255,255,0.05);
+  padding:10px 24px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;
+}
+.preview-toolbar-dots{display:flex;gap:6px}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot-red{background:#FF5F57}.dot-yellow{background:#FEBC2E}.dot-green{background:#28C840}
+.preview-url-bar{
+  flex:1;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:6px;padding:6px 14px;font-size:11px;color:var(--white40);
+  font-family:monospace;min-width:200px;
+}
+.preview-page-btns{display:flex;gap:6px;flex-wrap:wrap}
+.preview-page-btn{
+  background:transparent;border:1px solid rgba(255,255,255,0.08);
+  color:var(--white40);font-family:'Montserrat',sans-serif;font-size:10px;
+  font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  padding:5px 12px;border-radius:2px;cursor:pointer;transition:all 0.2s;
+}
+.preview-page-btn:hover{border-color:rgba(201,168,76,0.4);color:var(--gold)}
+.preview-page-btn.active{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.preview-frame-wrap{
+  flex:1;padding:20px;background:var(--black);
+  display:flex;flex-direction:column;gap:16px;
+}
+.preview-device-bar{display:flex;gap:8px;justify-content:center}
+.device-btn{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  color:var(--white40);font-size:10px;font-weight:600;letter-spacing:0.1em;
+  padding:5px 14px;border-radius:2px;cursor:pointer;transition:all 0.2s;
+}
+.device-btn:hover,.device-btn.active{border-color:var(--gold);color:var(--gold)}
+.frame-container{
+  flex:1;display:flex;justify-content:center;align-items:flex-start;
+  transition:all 0.3s;
+}
+.frame-container.desktop iframe{width:100%;max-width:1200px;height:700px;border-radius:4px}
+.frame-container.tablet iframe{width:768px;height:700px;border-radius:8px}
+.frame-container.mobile iframe{width:375px;height:700px;border-radius:16px}
+iframe{
+  border:2px solid rgba(255,255,255,0.08);border-radius:4px;
+  background:white;display:block;
+}
+
+/* ====== SLIDE: FEATURES ====== */
+.features-section{padding:80px 0;background:var(--black)}
+.features-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1px;background:rgba(255,255,255,0.04);margin-top:48px;border:1px solid rgba(255,255,255,0.04);border-radius:4px;overflow:hidden}
+.feature-card{background:var(--dark3);padding:36px 28px;transition:background 0.3s;cursor:default}
+.feature-card:hover{background:#1F1F1F}
+.feature-icon{
+  width:48px;height:48px;border:1px solid rgba(201,168,76,0.25);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;color:var(--gold);margin-bottom:20px;transition:all 0.3s;
+}
+.feature-card:hover .feature-icon{background:var(--gold);color:var(--black);border-color:var(--gold)}
+.feature-title{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);letter-spacing:0.04em;margin-bottom:10px}
+.feature-desc{font-size:12px;color:var(--white40);line-height:1.8}
+.feature-tag{
+  display:inline-block;margin-top:14px;font-size:9px;font-weight:700;letter-spacing:0.15em;
+  text-transform:uppercase;color:var(--gold-dim);border:1px solid rgba(201,168,76,0.2);
+  padding:3px 10px;border-radius:2px;
+}
+.feature-tag.ready{color:#22C55E;border-color:rgba(34,197,94,0.3)}
+.feature-tag.soon{color:#F59E0B;border-color:rgba(245,158,11,0.3)}
+
+/* ====== SLIDE: PRICING ====== */
+.pricing-slide{padding:80px 0;background:var(--dark)}
+.pricing-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(201,168,76,0.08);border-radius:4px;overflow:hidden;margin-top:48px}
+.price-card{background:#141414;padding:40px 28px;text-align:center;transition:background 0.3s}
+.price-card:hover{background:#181818}
+.price-card.featured{position:relative;border:1px solid rgba(201,168,76,0.3)}
+.price-flag{font-size:36px;display:block;margin-bottom:12px}
+.price-country{font-size:10px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:8px}
+.price-amount{font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--white);letter-spacing:0.02em;line-height:1;margin-bottom:4px}
+.price-currency{font-size:11px;letter-spacing:0.12em;color:var(--white40);display:block;margin-bottom:20px}
+.price-shipping{font-size:11px;color:var(--white40);margin-bottom:6px}
+.price-delivery{font-size:11px;color:var(--gold-dim);font-weight:600;letter-spacing:0.06em;margin-bottom:24px;display:block}
+.price-popular{
+  position:absolute;top:0;left:0;right:0;
+  background:var(--gold);color:var(--black);
+  font-family:'Bebas Neue',sans-serif;font-size:11px;letter-spacing:0.12em;
+  padding:5px;text-align:center;
+}
+
+/* ====== SLIDE: TECH STACK ====== */
+.tech-section{padding:80px 0;background:var(--black)}
+.tech-timeline{margin-top:48px;display:flex;flex-direction:column;gap:0}
+.tech-item{
+  display:flex;gap:32px;align-items:flex-start;
+  padding:28px 0;border-bottom:1px solid rgba(255,255,255,0.04);
+  transition:all 0.2s;
+}
+.tech-item:last-child{border-bottom:none}
+.tech-item:hover{background:rgba(255,255,255,0.01);padding-left:8px}
+.tech-num{
+  font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--gold);
+  opacity:0.2;line-height:1;width:60px;flex-shrink:0;
+}
+.tech-info{flex:1}
+.tech-title{font-family:'Bebas Neue',sans-serif;font-size:24px;color:var(--white);letter-spacing:0.04em;margin-bottom:6px}
+.tech-desc{font-size:12px;color:var(--white40);line-height:1.8;margin-bottom:12px}
+.tech-tags{display:flex;gap:8px;flex-wrap:wrap}
+.tech-tag{
+  font-size:10px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;
+  padding:4px 12px;border-radius:2px;
+}
+.tag-gold{background:rgba(201,168,76,0.1);color:var(--gold);border:1px solid rgba(201,168,76,0.2)}
+.tag-green{background:rgba(34,197,94,0.08);color:#22C55E;border:1px solid rgba(34,197,94,0.2)}
+.tag-blue{background:rgba(59,130,246,0.08);color:#60A5FA;border:1px solid rgba(59,130,246,0.2)}
+
+/* ====== SLIDE: CONTACT CTA ====== */
+.cta-slide{
+  min-height:70vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;padding:80px 40px;
+  background:
+    radial-gradient(ellipse 60% 80% at 50% 50%,rgba(201,168,76,0.06) 0%,transparent 70%),
+    linear-gradient(180deg,#0A0A0A,#111,#0A0A0A);
+  position:relative;overflow:hidden;
+}
+.cta-slide::before{
+  content:'';position:absolute;inset:0;
+  background-image:linear-gradient(rgba(201,168,76,0.03) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.03) 1px,transparent 1px);
+  background-size:60px 60px;pointer-events:none;
+}
+.cta-inner{position:relative;z-index:2;max-width:640px}
+.cta-contact-row{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:40px}
+.cta-contact-item{display:flex;align-items:center;gap:12px}
+.cta-icon{
+  width:42px;height:42px;border:1px solid rgba(201,168,76,0.25);border-radius:4px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--gold);flex-shrink:0;
+}
+.cta-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--white40);margin-bottom:2px}
+.cta-value{font-size:13px;font-weight:600;color:var(--white)}
+
+/* ====== SCROLLBAR ====== */
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--black)}
+::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:2px}
+
+/* ====== MARQUEE ====== */
+.marquee-wrap{background:var(--gold);padding:10px 0;overflow:hidden}
+.marquee-track{display:flex;gap:0;animation:marquee 28s linear infinite;width:max-content}
+.marquee-item{
+  font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.12em;
+  color:var(--black);padding:0 28px;display:flex;align-items:center;gap:14px;white-space:nowrap;
+}
+.mdot{width:4px;height:4px;border-radius:50%;background:rgba(0,0,0,0.35);flex-shrink:0}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* ====== RESPONSIVE ====== */
+@media(max-width:768px){
+  .demo-topbar-nav{display:none}
+  .pages-grid{grid-template-columns:1fr}
+  .pricing-cards{grid-template-columns:1fr}
+  .cover-stat{padding:18px 24px}
+  .frame-container.tablet iframe,.frame-container.desktop iframe{width:100%;max-width:100%}
+  .frame-container.mobile iframe{width:340px}
+}
+</style>
+</head>
+<body>
+
+<!-- ====== DEMO TOPBAR ====== -->
+<div class="demo-topbar">
+  <div class="demo-topbar-brand">
+    F1 <span>FIRE</span> FOLD
+    <span class="demo-topbar-badge">Client Demo</span>
+  </div>
+  <nav class="demo-topbar-nav">
+    <button class="active" onclick="showSlide('cover',this)">Overview</button>
+    <button onclick="showSlide('pages',this)">Pages</button>
+    <button onclick="showSlide('preview',this)">Live Preview</button>
+    <button onclick="showSlide('features',this)">Features</button>
+    <button onclick="showSlide('pricing',this)">Pricing</button>
+    <button onclick="showSlide('tech',this)">Tech</button>
+    <button onclick="showSlide('cta',this)">Contact</button>
+  </nav>
+  <div class="demo-topbar-actions">
+    <div class="demo-live-dot"></div>
+    <span class="demo-live-text">LIVE DEMO</span>
+  </div>
+</div>
+
+<!-- ====== SLIDE 1: COVER ====== -->
+<div id="slide-cover" class="section active">
+  <div class="cover">
+    <div class="cover-eyebrow">Premium Website Demo — 2026</div>
+    <div class="cover-logo-big">F1 <span>FIRE</span> FOLD</div>
+    <div class="cover-slogan">FIRE. FOLD. GRILL.</div>
+    <p class="cover-desc">A full-featured premium e-commerce website for portable foldable charcoal grills. Built for global reach — shipping to India, USA, UAE, UK, Australia and beyond.</p>
+    <div class="cover-actions">
+      <button class="btn btn-primary" onclick="showSlide('preview',document.querySelectorAll('.demo-topbar-nav button')[2])">▶ &nbsp;View Live Preview</button>
+      <button class="btn btn-outline" onclick="showSlide('pages',document.querySelectorAll('.demo-topbar-nav button')[1])">Explore Pages</button>
+    </div>
+    <div class="cover-stats">
+      <div class="cover-stat">
+        <div class="cover-stat-num">8</div>
+        <div class="cover-stat-label">Website Pages</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">6</div>
+        <div class="cover-stat-label">Currencies</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">5+</div>
+        <div class="cover-stat-label">Countries</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">100%</div>
+        <div class="cover-stat-label">Mobile Ready</div>
+      </div>
+      <div class="cover-stat">
+        <div class="cover-stat-num">2</div>
+        <div class="cover-stat-label">Payment Gateways</div>
+      </div>
+    </div>
+  </div>
+  <!-- Marquee -->
+  <div class="marquee-wrap">
+    <div class="marquee-track">
+      <div class="marquee-item"><span class="mdot"></span>FIRE. FOLD. GRILL.</div>
+      <div class="marquee-item"><span class="mdot"></span>Premium Portable Grilling</div>
+      <div class="marquee-item"><span class="mdot"></span>Stainless Steel Construction</div>
+      <div class="marquee-item"><span class="mdot"></span>Ships to USA · UAE · UK · Australia</div>
+      <div class="marquee-item"><span class="mdot"></span>Razorpay · PayPal · UPI</div>
+      <div class="marquee-item"><span class="mdot"></span>Mobile Responsive · SEO Ready</div>
+      <div class="marquee-item"><span class="mdot"></span>FIRE. FOLD. GRILL.</div>
+      <div class="marquee-item"><span class="mdot"></span>Premium Portable Grilling</div>
+      <div class="marquee-item"><span class="mdot"></span>Stainless Steel Construction</div>
+      <div class="marquee-item"><span class="mdot"></span>Ships to USA · UAE · UK · Australia</div>
+      <div class="marquee-item"><span class="mdot"></span>Razorpay · PayPal · UPI</div>
+      <div class="marquee-item"><span class="mdot"></span>Mobile Responsive · SEO Ready</div>
+    </div>
+  </div>
+  <!-- Quick page cards below marquee -->
+  <div style="background:#111;padding:60px 0">
+    <div class="container">
+      <span class="section-label">What's Inside</span>
+      <h2>Complete Website <span style="color:var(--gold)">Delivered</span></h2>
+      <div class="divider"></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:8px">
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🏠</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">Home Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Hero, features, product highlight, pricing, FAQ</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🛒</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">Shop Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Product cards, pricing, package details</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🔥</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">About Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Brand story, vision & mission</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🚚</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">Shipping Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">India + international shipping details</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">❓</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">FAQ Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">55 questions — product, shipping, payments</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.04);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">📞</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">Contact Page</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Contact form, WhatsApp, email</div></div>
+        </div>
+        <div style="background:#1C1C1C;border:1px solid rgba(201,168,76,0.12);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🏷️</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:white;letter-spacing:0.04em;margin-bottom:4px">Policies</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Privacy, Returns, T&C, Cookie, Warranty</div></div>
+        </div>
+        <div style="background:rgba(201,168,76,0.06);border:1px solid rgba(201,168,76,0.2);border-radius:4px;padding:20px 18px;display:flex;gap:14px;align-items:flex-start">
+          <div style="font-size:22px;flex-shrink:0">🌍</div>
+          <div><div style="font-family:'Bebas Neue',sans-serif;font-size:17px;color:var(--gold);letter-spacing:0.04em;margin-bottom:4px">Global Ready</div><div style="font-size:11px;color:rgba(255,255,255,0.35);line-height:1.7">Multi-currency, geo-pricing, WhatsApp float</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 2: PAGES ====== -->
+<div id="slide-pages" class="section">
+  <div class="pages-section" style="padding-top:80px">
+    <div class="container">
+      <span class="section-label">Website Structure</span>
+      <h2>All <span style="color:var(--gold)">Website Pages</span></h2>
+      <div class="divider"></div>
+      <p style="color:var(--white40);font-size:13px;max-width:520px">Every page fully built, styled, and content-ready. Click any card to jump to the live preview of that page.</p>
+      <div class="pages-grid">
+
+        <div class="page-card" onclick="showPreviewPage('home')">
+          <div class="page-card-preview">
+            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=700&h=400&fit=crop&q=80" alt="Home Page">
+            <div class="page-card-preview-overlay"></div>
+            <div class="page-card-num">01</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">Home Page</div>
+            <p class="page-card-desc">Hero section with grill imagery, Why Choose Us cards, product highlight with specs, pricing table, experience section, FAQ preview, and payments strip.</p>
+          </div>
+        </div>
+
+        <div class="page-card" onclick="showPreviewPage('shop')">
+          <div class="page-card-preview">
+            <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=700&h=400&fit=crop&q=80" alt="Shop Page">
+            <div class="page-card-preview-overlay"></div>
+            <div class="page-card-num">02</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">Shop Page</div>
+            <p class="page-card-desc">3 product cards — Standard, Pro, Camp Bundle. Package inclusions, currency pricing selector, add to cart buttons.</p>
+          </div>
+        </div>
+
+        <div class="page-card" onclick="showPreviewPage('about')">
+          <div class="page-card-preview">
+            <img src="https://images.unsplash.com/photo-1513185041617-8ab03f83d6c5?w=700&h=400&fit=crop&q=80" alt="About Page">
+            <div class="page-card-preview-overlay"></div>
+            <div class="page-card-num">03</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">About Us</div>
+            <p class="page-card-desc">Brand story, Bangalore headquarters, Vision & Mission cards with gold accent design.</p>
+          </div>
+        </div>
+
+        <div class="page-card" onclick="showPreviewPage('shipping')">
+          <div class="page-card-preview" style="background:linear-gradient(145deg,#1C1C1C,#141414);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:48px;color:rgba(201,168,76,0.15);flex-direction:column;gap:8px;">
+            <div>🚚</div>
+            <div style="font-size:14px;letter-spacing:0.2em;color:rgba(201,168,76,0.3)">SHIPPING INFO</div>
+            <div class="page-card-num">04</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">Shipping Policy</div>
+            <p class="page-card-desc">India + 7 international countries. Processing time, delivery estimates, tracking info, packaging details.</p>
+          </div>
+        </div>
+
+        <div class="page-card" onclick="showPreviewPage('faq-page')">
+          <div class="page-card-preview" style="background:linear-gradient(145deg,#1C1C1C,#141414);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;font-family:'Bebas Neue',sans-serif;">
+            <div style="font-size:48px;color:rgba(201,168,76,0.15)">❓</div>
+            <div style="font-size:14px;letter-spacing:0.2em;color:rgba(201,168,76,0.3)">55 QUESTIONS</div>
+            <div class="page-card-num">05</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">FAQ Page</div>
+            <p class="page-card-desc">55 answers covering product, assembly, shipping, payments, returns, warranty, and personalization.</p>
+          </div>
+        </div>
+
+        <div class="page-card" onclick="showPreviewPage('contact-page')">
+          <div class="page-card-preview" style="background:linear-gradient(145deg,#1C1C1C,#141414);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;font-family:'Bebas Neue',sans-serif;">
+            <div style="font-size:48px;color:rgba(201,168,76,0.15)">📞</div>
+            <div style="font-size:14px;letter-spacing:0.2em;color:rgba(201,168,76,0.3)">CONTACT US</div>
+            <div class="page-card-num">06</div>
+          </div>
+          <div class="page-card-body">
+            <div class="page-card-name">Contact Page</div>
+            <p class="page-card-desc">Contact form, direct email/phone/WhatsApp details, and quick-connect button.</p>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer features -->
+      <div style="margin-top:60px;padding:36px;background:#1C1C1C;border:1px solid rgba(201,168,76,0.1);border-radius:4px;">
+        <span class="section-label">Site-Wide Features</span>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;margin-top:20px">
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Sticky navigation bar</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>WhatsApp floating button</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Gold marquee ticker strip</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Full-width footer with links</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Email newsletter subscribe</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Social media links</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Trust badges strip</div>
+          <div style="display:flex;align-items:center;gap:10px;font-size:12px;color:rgba(255,255,255,0.6)"><div style="width:6px;height;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0"></div>Contact strip (all pages)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 3: LIVE PREVIEW ====== -->
+<div id="slide-preview" class="section">
+  <div class="preview-section">
+    <div class="preview-toolbar">
+      <div class="preview-toolbar-dots">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+      </div>
+      <div class="preview-url-bar" id="previewUrl">🌐 &nbsp;f1firefold.com — Home</div>
+      <div class="preview-page-btns">
+        <button class="preview-page-btn active" onclick="switchPage('home',this)">Home</button>
+        <button class="preview-page-btn" onclick="switchPage('shop',this)">Shop</button>
+        <button class="preview-page-btn" onclick="switchPage('about',this)">About</button>
+        <button class="preview-page-btn" onclick="switchPage('shipping',this)">Shipping</button>
+        <button class="preview-page-btn" onclick="switchPage('faq-page',this)">FAQ</button>
+        <button class="preview-page-btn" onclick="switchPage('contact-page',this)">Contact</button>
+      </div>
+    </div>
+    <div class="preview-frame-wrap">
+      <div class="preview-device-bar">
+        <button class="device-btn active" onclick="switchDevice('desktop',this)">🖥 Desktop</button>
+        <button class="device-btn" onclick="switchDevice('tablet',this)">📱 Tablet</button>
+        <button class="device-btn" onclick="switchDevice('mobile',this)">📲 Mobile</button>
+      </div>
+      <div class="frame-container desktop" id="frameContainer">
+        <iframe id="siteFrame" src="f1_fire_fold_website.html" title="F1 Fire Fold Website Preview"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 4: FEATURES ====== -->
+<div id="slide-features" class="section">
+  <div class="features-section">
+    <div class="container">
+      <span class="section-label">Website Capabilities</span>
+      <h2>Built-In <span style="color:var(--gold)">Features</span></h2>
+      <div class="divider"></div>
+      <div class="features-grid">
+
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <div class="feature-title">Multi-Currency Pricing</div>
+          <p class="feature-desc">Automatic geo-detection shows prices in INR, USD, AED, GBP, EUR, AUD. Manual override also available.</p>
+          <span class="feature-tag ready">✓ Ready</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💳</div>
+          <div class="feature-title">Payment Gateways</div>
+          <p class="feature-desc">Razorpay for India (UPI, cards, net banking, COD). PayPal for international orders. Stripe integration planned.</p>
+          <span class="feature-tag ready">✓ Active</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <div class="feature-title">WhatsApp Integration</div>
+          <p class="feature-desc">Floating WhatsApp chat button on every page. Direct link to +91 83173 53699 with pre-filled context.</p>
+          <span class="feature-tag ready">✓ Live</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📱</div>
+          <div class="feature-title">Mobile Responsive</div>
+          <p class="feature-desc">Fully responsive across desktop, tablet, and mobile. Optimised grid layouts for every screen size.</p>
+          <span class="feature-tag ready">✓ Ready</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚀</div>
+          <div class="feature-title">SEO Optimised</div>
+          <p class="feature-desc">Meta titles, descriptions, schema support, custom URLs, semantic HTML for search engine visibility.</p>
+          <span class="feature-tag ready">✓ Ready</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+          <div class="feature-title">Shiprocket Integration</div>
+          <p class="feature-desc">Pan-India delivery with real-time tracking. SMS and email tracking notifications for every order.</p>
+          <span class="feature-tag ready">✓ Ready</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📦</div>
+          <div class="feature-title">Product Personalisation</div>
+          <p class="feature-desc">Custom name, logo upload, gift message, font selection. Production sheet generator and order tracking flow.</p>
+          <span class="feature-tag soon">⟳ Phase 2</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <div class="feature-title">Admin Backend</div>
+          <p class="feature-desc">Manage pricing per country, update products, view orders, download personalisation data, generate GST invoices.</p>
+          <span class="feature-tag soon">⟳ Phase 2</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📸</div>
+          <div class="feature-title">Instagram Feed</div>
+          <p class="feature-desc">Live Instagram feed integration to display latest posts and outdoor grilling content directly on the website.</p>
+          <span class="feature-tag soon">⟳ Planned</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">📧</div>
+          <div class="feature-title">Email Notifications</div>
+          <p class="feature-desc">Automated order confirmation, production status, dispatch, and delivery notification emails to customers.</p>
+          <span class="feature-tag soon">⟳ Phase 2</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🏢</div>
+          <div class="feature-title">Corporate / Bulk Orders</div>
+          <p class="feature-desc">Dedicated bulk order enquiry form. Custom quotation flow with company name, quantity, logo upload.</p>
+          <span class="feature-tag soon">⟳ Phase 2</span>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">🧾</div>
+          <div class="feature-title">GST Invoice System</div>
+          <p class="feature-desc">Auto-generated GST invoices for Indian orders. Export/international orders handled separately per regulations.</p>
+          <span class="feature-tag soon">⟳ Phase 2</span>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 5: PRICING ====== -->
+<div id="slide-pricing" class="section">
+  <div class="pricing-slide">
+    <div class="container">
+      <span class="section-label">Product Pricing</span>
+      <h2>Global <span style="color:var(--gold)">Pricing Table</span></h2>
+      <div class="divider"></div>
+      <p style="color:var(--white40);font-size:13px;max-width:540px">Geo-location detects your country and shows prices in local currency automatically. Manual switch also available at checkout.</p>
+
+      <div class="pricing-cards">
+        <div class="price-card">
+          <span class="price-flag">🇮🇳</span>
+          <span class="price-country">India</span>
+          <div class="price-amount">₹999</div>
+          <span class="price-currency">Indian Rupee · INR</span>
+          <div class="price-shipping">🚚 Free Shipping</div>
+          <span class="price-delivery">3–7 Business Days</span>
+          <button class="btn btn-outline" style="font-size:10px;padding:10px 24px;width:100%">Order India</button>
+        </div>
+        <div class="price-card featured">
+          <div class="price-popular">MOST POPULAR</div>
+          <span class="price-flag" style="margin-top:20px;">🇺🇸</span>
+          <span class="price-country">United States</span>
+          <div class="price-amount">$24.99</div>
+          <span class="price-currency">US Dollar · USD</span>
+          <div class="price-shipping">🚚 Shipping $9.99</div>
+          <span class="price-delivery">7–15 Business Days</span>
+          <button class="btn btn-primary" style="font-size:10px;padding:10px 24px;width:100%">Order USA</button>
+        </div>
+        <div class="price-card">
+          <span class="price-flag">🇦🇪</span>
+          <span class="price-country">United Arab Emirates</span>
+          <div class="price-amount">AED 89</div>
+          <span class="price-currency">UAE Dirham · AED</span>
+          <div class="price-shipping">🚚 Shipping AED 20</div>
+          <span class="price-delivery">5–10 Business Days</span>
+          <button class="btn btn-outline" style="font-size:10px;padding:10px 24px;width:100%">Order UAE</button>
+        </div>
+      </div>
+
+      <p style="text-align:center;margin-top:16px;font-size:11px;color:rgba(255,255,255,0.2)">Also ships to UK · Australia · Canada · Germany · New Zealand</p>
+
+      <!-- Products table -->
+      <div style="margin-top:60px">
+        <span class="section-label">Product Variants</span>
+        <div style="background:#1C1C1C;border:1px solid rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;margin-top:20px">
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border-bottom:1px solid rgba(255,255,255,0.05);padding:14px 20px;background:#141414">
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35)">Product</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-align:center">India</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-align:center">USA</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);text-align:center">UAE</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center">
+            <div><div style="font-size:14px;font-weight:600;color:white;margin-bottom:2px">F1 Fire Fold Standard</div><div style="font-size:11px;color:rgba(255,255,255,0.3)">Foldable charcoal grill</div></div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">₹999</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">$24.99</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">AED 89</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,0.04);align-items:center">
+            <div><div style="font-size:14px;font-weight:600;color:white;margin-bottom:2px">F1 Fire Fold Pro</div><div style="font-size:11px;color:rgba(255,255,255,0.3)">Heavy-duty + carry bag</div></div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">₹1,999</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">$44.99</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">AED 169</div>
+          </div>
+          <div style="display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:16px 20px;align-items:center">
+            <div><div style="font-size:14px;font-weight:600;color:white;margin-bottom:2px">F1 Camp Bundle</div><div style="font-size:11px;color:rgba(255,255,255,0.3)">Grill + tongs + starter kit</div></div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--gold)">₹1,499</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:rgba(255,255,255,0.25);font-size:14px">Coming soon</div>
+            <div style="text-align:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:rgba(255,255,255,0.25)">Coming soon</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 6: TECH ====== -->
+<div id="slide-tech" class="section">
+  <div class="tech-section">
+    <div class="container">
+      <span class="section-label">Technical Overview</span>
+      <h2>What's <span style="color:var(--gold)">Built In</span></h2>
+      <div class="divider"></div>
+      <div class="tech-timeline">
+
+        <div class="tech-item">
+          <div class="tech-num">01</div>
+          <div class="tech-info">
+            <div class="tech-title">Design & Frontend</div>
+            <p class="tech-desc">Premium dark theme with Matte Black, Gold, and Dark Grey palette. Bebas Neue headlines, Montserrat body. Fully responsive grid across mobile, tablet, and desktop. Zero external framework dependency — pure HTML/CSS/JS.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-gold">HTML5</span>
+              <span class="tech-tag tag-gold">CSS3</span>
+              <span class="tech-tag tag-gold">Vanilla JS</span>
+              <span class="tech-tag tag-blue">Bebas Neue</span>
+              <span class="tech-tag tag-blue">Montserrat</span>
+              <span class="tech-tag tag-green">Mobile First</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item">
+          <div class="tech-num">02</div>
+          <div class="tech-info">
+            <div class="tech-title">Payment Integration</div>
+            <p class="tech-desc">Razorpay handles all Indian transactions — UPI, debit/credit cards, net banking, and COD. PayPal handles international orders. Stripe integration planned for Phase 2. Secure encrypted checkout throughout.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-green">Razorpay ✓</span>
+              <span class="tech-tag tag-green">PayPal ✓</span>
+              <span class="tech-tag tag-gold">UPI</span>
+              <span class="tech-tag tag-gold">COD India</span>
+              <span class="tech-tag tag-blue">Stripe (Phase 2)</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item">
+          <div class="tech-num">03</div>
+          <div class="tech-info">
+            <div class="tech-title">Shipping & Logistics</div>
+            <p class="tech-desc">Shiprocket integration for Pan-India delivery. Automatic tracking updates via SMS and email. Country-specific delivery timelines displayed automatically. Premium protective packaging on all orders.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-green">Shiprocket ✓</span>
+              <span class="tech-tag tag-gold">Pan India</span>
+              <span class="tech-tag tag-gold">7 Countries</span>
+              <span class="tech-tag tag-blue">Live Tracking</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item">
+          <div class="tech-num">04</div>
+          <div class="tech-info">
+            <div class="tech-title">Multi-Currency & Geo-Pricing</div>
+            <p class="tech-desc">Automatic visitor country detection. Prices display in local currency — INR, USD, AED, GBP, EUR, AUD. Admin can configure per-country pricing, shipping charges, and tax rules from backend without changing code.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-gold">INR · USD · AED</span>
+              <span class="tech-tag tag-gold">GBP · EUR · AUD</span>
+              <span class="tech-tag tag-blue">Geo-Detection</span>
+              <span class="tech-tag tag-green">Admin Editable</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item">
+          <div class="tech-num">05</div>
+          <div class="tech-info">
+            <div class="tech-title">SEO & Performance</div>
+            <p class="tech-desc">Custom meta titles and descriptions per page. Schema markup support. Clean semantic HTML structure. Fast loading with optimised image delivery via CDN. Cookie policy and privacy-compliant for Meta Ads and Google Ads.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-green">SEO Ready</span>
+              <span class="tech-tag tag-green">Schema Markup</span>
+              <span class="tech-tag tag-blue">CDN Images</span>
+              <span class="tech-tag tag-gold">Cookie Policy</span>
+              <span class="tech-tag tag-gold">Meta Ads Ready</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="tech-item">
+          <div class="tech-num">06</div>
+          <div class="tech-info">
+            <div class="tech-title">Phase 2 Roadmap</div>
+            <p class="tech-desc">Personalisation module with text, logo upload, font selection. Admin order panel. Production sheet generator. GST invoice system. Instagram feed integration. Bulk/corporate order system. Design approval workflow.</p>
+            <div class="tech-tags">
+              <span class="tech-tag tag-blue">Personalisation</span>
+              <span class="tech-tag tag-blue">Admin Panel</span>
+              <span class="tech-tag tag-blue">GST Invoices</span>
+              <span class="tech-tag tag-blue">Instagram Feed</span>
+              <span class="tech-tag tag-blue">Bulk Orders</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ====== SLIDE 7: CONTACT CTA ====== -->
+<div id="slide-cta" class="section">
+  <div class="cta-slide">
+    <div class="cta-inner">
+      <span class="section-label" style="justify-content:center;display:block;text-align:center">Ready to Launch</span>
+      <h2 style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,6vw,80px);letter-spacing:0.04em;color:white;margin-bottom:8px">Let's Take It <span style="color:var(--gold)">Live</span></h2>
+      <p style="font-size:13px;color:var(--white40);max-width:440px;margin:0 auto 36px;line-height:1.9">Website is ready. Domain, hosting, payment gateway activation, and product images are the next steps. Get in touch to move forward.</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:48px">
+        <a href="https://wa.me/918317353699" target="_blank" class="btn btn-primary">💬 &nbsp;WhatsApp Us</a>
+        <a href="mailto:f1firefold@gmail.com" class="btn btn-outline">✉ &nbsp;Send Email</a>
+      </div>
+      <div class="cta-contact-row">
+        <div class="cta-contact-item">
+          <div class="cta-icon">✉</div>
+          <div>
+            <div class="cta-label">Email</div>
+            <div class="cta-value">f1firefold@gmail.com</div>
+          </div>
+        </div>
+        <div class="cta-contact-item">
+          <div class="cta-icon">📱</div>
+          <div>
+            <div class="cta-label">Phone & WhatsApp</div>
+            <div class="cta-value">+91 83173 53699</div>
+          </div>
+        </div>
+        <div class="cta-contact-item">
+          <div class="cta-icon">📍</div>
+          <div>
+            <div class="cta-label">Location</div>
+            <div class="cta-value">Ulsoor, Bangalore 560008</div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:60px;padding-top:40px;border-top:1px solid rgba(255,255,255,0.04)">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:0.35em;color:rgba(201,168,76,0.4)">FIRE. FOLD. GRILL.</div>
+        <div style="font-size:11px;color:rgba(255,255,255,0.15);margin-top:8px">© 2026 F1 Fire Fold. All Rights Reserved.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+var currentSlide='cover';
+var currentPage='home';
+var currentDevice='desktop';
+
+function showSlide(id,btn){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById('slide-'+id).classList.add('active');
+  currentSlide=id;
+  document.querySelectorAll('.demo-topbar-nav button').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(id==='preview') loadPreviewFrame();
+}
+
+function showPreviewPage(pageId){
+  showSlide('preview',document.querySelectorAll('.demo-topbar-nav button')[2]);
+  setTimeout(()=>{ switchPage(pageId,null); },300);
+}
+
+function loadPreviewFrame(){
+  var frame=document.getElementById('siteFrame');
+  if(!frame.src || frame.src==='about:blank'){
+    frame.src='f1_fire_fold_website.html';
+  }
+}
+
+function switchPage(pageId,btn){
+  currentPage=pageId;
+  var frame=document.getElementById('siteFrame');
+  var urlBar=document.getElementById('previewUrl');
+  var names={
+    'home':'Home','shop':'Shop','about':'About Us',
+    'shipping':'Shipping','faq-page':'FAQ','contact-page':'Contact'
+  };
+  if(frame.contentWindow){
+    try{
+      frame.contentWindow.showPage(pageId);
+    } catch(e){
+      frame.src='f1_fire_fold_website.html';
+    }
+  }
+  urlBar.textContent='🌐  f1firefold.com — '+( names[pageId]||pageId );
+  document.querySelectorAll('.preview-page-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  else {
+    document.querySelectorAll('.preview-page-btn').forEach(b=>{
+      if(b.textContent.toLowerCase().replace(' ','').includes(pageId.replace('-page','').replace('-',''))){
+        b.classList.add('active');
+      }
+    });
+  }
+}
+
+function switchDevice(device,btn){
+  currentDevice=device;
+  var container=document.getElementById('frameContainer');
+  container.className='frame-container '+device;
+  document.querySelectorAll('.device-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+</script>
+</body>
+</html>
